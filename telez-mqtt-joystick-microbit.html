@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Joy Stick</title>
+		<meta charset="utf-8">
+		<meta name="description" content="Example page of use pure Javascript JoyStick">
+		<meta name="author" content="Roberto D'Amico">
+		<link rel="shortcut icon" type="image/png" href="http://bobboteck.github.io/img/roberto-damico-bobboteck.png">
+		<script src="browserMqtt.js"></script>
+		<style>
+
+body
+{
+	font-family: monospace;
+	
+}
+
+
+</style>
+		<script src="joy.js"></script>
+	</head>
+	<body>
+		<!-- Example of FIXED or ABSOLUTE position -->
+		<div class="container" style="box-shadow: 0 6px 10px 0 rgba(8, 8, 8, 0.2), 0 6px 20px 0 rgba(3, 0, 0, 0.19);width: 50%;margin-left: 370px;">
+			<h1 style="font-size: 45px;border-style: dashed;text-align: center;">Joy Stick</h1>
+		</div>
+		<h2 id="status-header" style="text-align: center;margin-left:100px;">Connecting Please Wait</h2>
+
+
+			<!-- <div class="container" style="border-style: dashed; width: 60%; margin-left: 250px;height: 250px;">
+			<div id="joy3Div" style="width:200px;height:200px;margin-left: 370px;"></div>
+		</div> -->
+		<div class="container" style="border-style: dashed;box-shadow: 0 6px 10px 0 rgba(8, 8, 8, 0.2), 0 6px 20px 0 rgba(3, 0, 0, 0.19);width: 40%;margin-left: 450px;">
+			<div id="joy3Div" style="width:200px;height:200px;margin-left: 150px;"></div>
+		</div>
+			<div style="margin-left:570px; margin-top: -25px;">
+
+			<label for="" >Direction:</label>
+			<input id="joy3Direzione" type="text" /><br />
+		</div>
+		
+		<!-- Example of two JoyStick integrated in the page structure -->
+	
+	
+	
+<script type="text/javascript">
+var joy3Param = { "title": "joystick3" };
+var Joy3 = new JoyStick('joy3Div', joy3Param);
+
+var joy3IinputPosX = document.getElementById("joy3PosizioneX");
+var joy3InputPosY = document.getElementById("joy3PosizioneY");
+var joy3Direzione = document.getElementById("joy3Direzione");
+var joy3X = document.getElementById("joy3X");
+var joy3Y = document.getElementById("joy3Y");
+
+setInterval(function(){ joy3IinputPosX.value=Joy3.GetPosX(); }, 50);
+setInterval(function(){ joy3InputPosY.value=Joy3.GetPosY(); }, 50);
+
+
+setInterval(function(){ 
+	joy3Direzione.value=Joy3.GetDir(); 
+	client.publish('signalpointer', Joy3.GetDir()) 
+}, 50);
+
+var broker = 'wss://test.mosquitto.org:8081/mqtt';
+var client  = mqtt.connect(broker);
+
+var status_header = document.getElementById('status-header')
+
+client.on('connect', function () {
+    status_header.innerHTML = 'Connected to '+broker; 
+    console.log('Connected to '+broker)
+})
+
+
+setInterval(function(){ joy3X.value=Joy3.GetX(); }, 50);
+setInterval(function(){ joy3Y.value=Joy3.GetY(); }, 50);
+		</script>
+	</body>
+</html>
